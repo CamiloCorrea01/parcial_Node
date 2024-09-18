@@ -1,0 +1,20 @@
+{
+  "name": "parcial",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "nodemon index"
+  },
+  "keywords": [
+    "api",
+    "NodeJs"
+  ],
+  "author": "Cristian Correa",
+  "license": "ISC",
+  "description": "Parcial Api",
+  "dependencies": {
+    "express": "^4.21.0",
+    "nodemon": "^3.1.5"
+  }
+}

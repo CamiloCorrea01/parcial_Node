@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestión de Productos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .product-list {
+            margin-top: 20px;
+        }
+        .product-item {
+            margin-bottom: 10px;
+        }
+        .button {
+            margin: 5px;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        .button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <h1>Gestión de Productos</h1>
+
+    <button class="button" onclick="getAllProducts()">Ver Todos los Productos</button>
+
+    <h2>Agregar Producto</h2>
+    <form id="productForm">
+        <label for="id">ID:</label>
+        <input type="number" id="id" name="id" required><br><br>
+
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+
+        <label for="precio">Precio:</label>
+        <input type="number" id="precio" name="precio" required><br><br>
+
+        <label for="departamento">Departamento:</label>
+        <input type="text" id="departamento" name="departamento" required><br><br>
+
+        <label for="ciudad">Ciudad:</label>
+        <input type="text" id="ciudad" name="ciudad" required><br><br>
+
+        <button type="submit" class="button">Agregar Producto</button>
+    </form>
+
+
+    <div class="product-list" id="productList">
+        <h2>Lista de Productos</h2>
+    
+    </div>
+
+    <script>
+        
+        function getAllProducts() {
+            fetch('/product')
+                .then(response => response.json())
+                .then(data => {
+                    const productList = document.getElementById('productList');
+                    productList.innerHTML = '<h2>Lista de Productos</h2>';
+                    data.data.forEach(product => {
+                        productList.innerHTML += `
+                            <div class="product-item">
+                                <strong>ID:</strong> ${product.id} - 
+                                <strong>Nombre:</strong> ${product.nombre} - 
+                                <strong>Precio:</strong> ${product.precio} - 
+                                <strong>Departamento:</strong> ${product.departamento} - 
+                                <strong>Ciudad:</strong> ${product.ciudad}
+                            </div>
+                        `;
+                    });
+                })
+                .catch(error => console.error('Error:', error));
+        }
+
+        const productForm = document.getElementById('productForm');
+        productForm.addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const productData = {
+                id: document.getElementById('id').value,
+                nombre: document.getElementById('nombre').value,
+                precio: document.getElementById('precio').value,
+                departamento: document.getElementById('departamento').value,
+                ciudad: document.getElementById('ciudad').value
+            };
+
+            fetch('/product', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(productData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Success:', data);
+                getAllProducts();  
+            })
+            .catch(error => console.error('Error:', error));
+        });
+    </script>
+</body>
+</html>
